@@ -820,7 +820,7 @@ def create_drone(tfrecord_dir, drone_dir):
       frame = frame.transpose(2, 0, 1)
       tfr.add_image(frame)
 
-      vidx = (vidx + 1) * len(videos)
+      vidx = (vidx + 1) % len(videos)
 
   with TFRecordExporter(tfrecord_dir, len(image_filenames)) as tfr:
     order = tfr.choose_shuffled_order()
