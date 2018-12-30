@@ -806,6 +806,7 @@ def create_drone(tfrecord_dir, drone_dir):
         frame = videos[vidx].get_next_data()
       except:
         videos.pop(vidx)
+        vidx = vidx % len(videos)
         continue
 
       dims = np.array([frame.shape[0], frame.shape[1]], dtype=np.float32)
@@ -821,15 +822,6 @@ def create_drone(tfrecord_dir, drone_dir):
       tfr.add_image(frame)
 
       vidx = (vidx + 1) % len(videos)
-
-  with TFRecordExporter(tfrecord_dir, len(image_filenames)) as tfr:
-    order = tfr.choose_shuffled_order()
-    for idx in range(order.size):
-      img = np.asarray(PIL.Image.open(image_filenames[order[idx]]))
-      assert img.shape == (218, 178, 3)
-      img = img[cy - 64:cy + 64, cx - 64:cx + 64]
-      img = img.transpose(2, 0, 1)  # HWC => CHW
-      tfr.add_image(img)
 
 
 def execute_cmdline(argv):
