@@ -775,7 +775,7 @@ def create_from_hdf5(tfrecord_dir, hdf5_filename, shuffle):
 #----------------------------------------------------------------------------
 
 
-def create_drone(tfrecord_dir, drone_dir):
+def create_drone(tfrecord_dir, drone_dir, resolution=1024):
   image_ph = tf.placeholder(dtype=tf.uint8, shape=(None, None, 3))
   encoded_ph = tf.image.encode_png(image_ph)
   sess = tf.Session()
@@ -811,13 +811,14 @@ def create_drone(tfrecord_dir, drone_dir):
 
       dims = np.array([frame.shape[0], frame.shape[1]], dtype=np.float32)
       dims /= dims.min()
-      dims *= 1024
+      dims *= resolution
       dims = dims.astype(int)
       frame = cv2.resize(
           frame, dsize=(dims[0], dims[1]), interpolation=cv2.INTER_CUBIC)
       cy = frame.shape[0] // 2
       cx = frame.shape[1] // 2
-      frame = frame[cy - 512:cy + 512, cx - 512:cx + 512]
+      shift = resolution // 2
+      frame = frame[cy - shift:cy + shift, cx - shift:cx + shift]
       frame = frame.transpose(2, 0, 1)
       tfr.add_image(frame)
 
@@ -954,6 +955,7 @@ def execute_cmdline(argv):
                   'create_drone datasets/mydataset youtube/')
   p.add_argument('tfrecord_dir', help='New dataset directory to be created')
   p.add_argument('drone_dir', help='Directory containing the images')
+  p.add_argument('resolution', help='image resolution')
 
   p = add_command(
       'create_from_hdf5', 'Create dataset from legacy HDF5 archive.',

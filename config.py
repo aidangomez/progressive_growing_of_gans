@@ -29,7 +29,7 @@ class EasyDict(dict):
 # Paths.
 
 data_dir = '/mnt/data/'
-result_dir = '/mnt/results/run'
+result_dir = '.'
 
 #----------------------------------------------------------------------------
 # TensorFlow options.
@@ -64,13 +64,12 @@ D_loss = EasyDict(
     func='loss.D_wgangp_acgan')  # Options for discriminator loss.
 sched = EasyDict()  # Options for train.TrainingSchedule.
 grid = EasyDict(
-    size='1080p',
+    size='4k',
     layout='random')  # Options for train.setup_snapshot_image_grid().
 
 # Dataset (choose one).
 desc += '-drone'
 dataset = EasyDict(tfrecord_dir='drone_data2')
-train.mirror_augment = True
 # desc += '-celebahq';            dataset = EasyDict(tfrecord_dir='celebahq'); train.mirror_augment = True
 #desc += '-celeba';              dataset = EasyDict(tfrecord_dir='celeba'); train.mirror_augment = True
 #desc += '-cifar10';             dataset = EasyDict(tfrecord_dir='cifar10')
@@ -129,12 +128,16 @@ sched.minibatch_dict = {
     16: 128,
     32: 64,
     64: 32,
-    128: 16
+    128: 16,
+    512: 8,
+    1024: 4,
 }
 sched.G_lrate_dict = {
     256: 0.0015,
     512: 0.002,
-    1024: 0.003
+    1024: 0.003,
+    2048: 0.005,
+    4096: 0.009,
 }
 sched.D_lrate_dict = EasyDict(sched.G_lrate_dict)
 train.total_kimg = 12000
@@ -142,11 +145,7 @@ train.total_kimg = 12000
 
 # Numerical precision (choose one).
 desc += '-fp32'
-sched.max_minibatch_per_gpu = {
-    256: 16,
-    512: 8,
-    1024: 4
-}
+sched.max_minibatch_per_gpu = {256: 16, 512: 8, 1024: 4}
 #desc += '-fp16'; G.dtype = 'float16'; D.dtype = 'float16'; G.pixelnorm_epsilon=1e-4; G_opt.use_loss_scaling = True; D_opt.use_loss_scaling = True; sched.max_minibatch_per_gpu = {512: 16, 1024: 8}
 
 # Disable individual features.
@@ -169,7 +168,10 @@ sched.max_minibatch_per_gpu = {
 # Utility scripts.
 # To run, uncomment the appropriate line and launch train.py.
 
-#train = EasyDict(func='util_scripts.generate_fake_images', run_id=23, num_pngs=1000); num_gpus = 1; desc = 'fake-images-' + str(train.run_id)
+train = EasyDict(
+    func='util_scripts.generate_fake_images', run_id=00, num_pngs=1000)
+num_gpus = 1
+desc = 'fake-images-' + str(train.run_id)
 #train = EasyDict(func='util_scripts.generate_fake_images', run_id=23, grid_size=[15,8], num_pngs=10, image_shrink=4); num_gpus = 1; desc = 'fake-grids-' + str(train.run_id)
 #train = EasyDict(func='util_scripts.generate_interpolation_video', run_id=23, grid_size=[1,1], duration_sec=60.0, smoothing_sec=1.0); num_gpus = 1; desc = 'interpolation-video-' + str(train.run_id)
 #train = EasyDict(func='util_scripts.generate_training_video', run_id=23, duration_sec=20.0); num_gpus = 1; desc = 'training-video-' + str(train.run_id)
