@@ -29,7 +29,7 @@ class EasyDict(dict):
 # Paths.
 
 data_dir = '/mnt/data/'
-result_dir = '.'
+result_dir = '/mnt/runs'
 
 #----------------------------------------------------------------------------
 # TensorFlow options.
@@ -68,8 +68,8 @@ grid = EasyDict(
     layout='random')  # Options for train.setup_snapshot_image_grid().
 
 # Dataset (choose one).
-desc += '-drone'
-dataset = EasyDict(tfrecord_dir='drone_data2')
+desc += '-chimps'
+dataset = EasyDict(tfrecord_dir='chimp')
 # desc += '-celebahq';            dataset = EasyDict(tfrecord_dir='celebahq'); train.mirror_augment = True
 #desc += '-celeba';              dataset = EasyDict(tfrecord_dir='celeba'); train.mirror_augment = True
 #desc += '-cifar10';             dataset = EasyDict(tfrecord_dir='cifar10')
