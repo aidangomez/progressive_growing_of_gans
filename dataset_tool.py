@@ -877,7 +877,7 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
       imageio.get_reader(os.path.join(drone_dir, fn), 'ffmpeg')
       for fn in filenames
   ]
-  count = sum(len(v) for v in videos)
+  count = en(videos[0])
   vidx = 0
   with TFRecordExporter(tfrecord_dir, count) as tfr:
     while True:
