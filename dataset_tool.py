@@ -806,6 +806,8 @@ def create_drone(tfrecord_dir, drone_dir, resolution=1024):
         frame = videos[vidx].get_next_data()
       except:
         videos.pop(vidx)
+        if len(videos) == 0:
+          break
         vidx = vidx % len(videos)
         continue
 
@@ -845,6 +847,8 @@ def create_chimps(tfrecord_dir, chimp_dir, resolution=1024):
         frame = videos[vidx].get_next_data()
       except:
         videos.pop(vidx)
+        if len(videos) == 0:
+          break
         vidx = vidx % len(videos)
         continue
 
