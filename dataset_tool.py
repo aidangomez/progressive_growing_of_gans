@@ -829,7 +829,7 @@ def create_chimps(tfrecord_dir, chimp_dir, resolution=1024):
   image_ph = tf.placeholder(dtype=tf.uint8, shape=(None, None, 3))
   encoded_ph = tf.image.encode_png(image_ph)
   sess = tf.Session()
-  filenames = ["%d.m4v" % i for i in range(19)]
+  filenames = ["%d.m4v" % i for i in range(24)]
   videos = [
       imageio.get_reader(os.path.join(chimp_dir, fn), 'ffmpeg')
       for fn in filenames
