@@ -872,18 +872,7 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
   image_ph = tf.placeholder(dtype=tf.uint8, shape=(None, None, 3))
   encoded_ph = tf.image.encode_png(image_ph)
   sess = tf.Session()
-  filenames = [
-      "WikiLeaks raw US Apache footage-25EWUUBjPMo.mp4",
-      "US Troops Turkey Shoot, Baghdad part 1_3-Gm05G6w_hIU.mp4",
-      "Turkey Shoot USA-DUJcTOWkdY0.mp4",
-      "Russian UAV vs ISIS -  Bukamal Syria (real war footage)-gH2vpGVjWNA.mp4",
-      "Insurgents Caught Planting Explosives (2009) _WARNING MAY DISTURB SOME VIEWERS-MGYV3JirmyA.mp4",
-      "Insane Russian Drone air strikes On Isis 2017-Qp200xzhXdE.mp4",
-      "COMBAT FOOTAGE! - Aerial Attack on Terrorist Vehicle!-8Nx-ikJsHgA.mp4",
-      "Combat cam - Iraqi aviation annihilates ISIS convoy of 700 vehicles fleeing Fallujah-ciYa4yPUBTw.mp4",
-      "Apache near Howz-E-Madad, Kandahar, Afghanistan for Op Spinarwa, 2009 Part 1-yotbnhfRgMY.mp4",
-      "AC-130 Gunship Mission-i-gMMQTt5-c.mp4"
-  ]
+  filenames = ["DJI_0343.mp4"]
   videos = [
       imageio.get_reader(os.path.join(drone_dir, fn), 'ffmpeg')
       for fn in filenames
@@ -899,6 +888,8 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
         frame = videos[vidx].get_next_data()
       except:
         videos.pop(vidx)
+        if len(videos) == 0:
+          break
         vidx = vidx % len(videos)
         continue
 
@@ -1049,6 +1040,12 @@ def execute_cmdline(argv):
   p.add_argument('tfrecord_dir', help='New dataset directory to be created')
   p.add_argument('drone_dir', help='Directory containing the images')
   p.add_argument('resolution', help='image resolution')
+
+  p = add_command('create_drone2', 'Create dataset from drone footage.',
+                  'create_drone datasets/mydataset youtube/')
+  p.add_argument('tfrecord_dir', help='New dataset directory to be created')
+  p.add_argument('drone_dir', help='Directory containing the images')
+  p.add_argument('resolution', type=int, help='image resolution')
 
   p = add_command('create_chimps', 'Create dataset from drone footage.',
                   'create_drone datasets/mydataset youtube/')
