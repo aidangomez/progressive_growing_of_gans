@@ -894,22 +894,16 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
         continue
 
       dims = np.array([frame.shape[0], frame.shape[1]], dtype=np.float32)
-      print(dims)
       dims /= dims.min()
-      print(dims)
       dims *= resolution
-      print(dims)
       dims = np.round(dims)
-      print(dims)
       dims = dims.astype(np.int32)
-      print(dims)
       frame = cv2.resize(
           frame, dsize=(dims[0], dims[1]), interpolation=cv2.INTER_CUBIC)
       cy = frame.shape[0] // 2
       cx = frame.shape[1] // 2
       shift = resolution // 2
       frame = frame[cy - shift:cy + shift, cx - shift:cx + shift]
-      print(frame.shape)
       frame = frame.transpose(2, 0, 1)
       tfr.add_image(frame)
 
