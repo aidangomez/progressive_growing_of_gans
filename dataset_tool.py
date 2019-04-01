@@ -899,7 +899,9 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
       print(dims)
       dims *= resolution
       print(dims)
-      dims = dims.floor().astype(np.int32)
+      dims = np.floor(dims)
+      print(dims)
+      dims = dims.astype(np.int32)
       print(dims)
       frame = cv2.resize(
           frame, dsize=(dims[0], dims[1]), interpolation=cv2.INTER_CUBIC)
