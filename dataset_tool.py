@@ -894,6 +894,7 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
         continue
 
       dims = np.array([frame.shape[0], frame.shape[1]], dtype=np.float32)
+      print(dims)
       dims /= dims.min()
       dims *= resolution
       dims = dims.astype(int)
