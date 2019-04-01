@@ -899,7 +899,7 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
       print(dims)
       dims *= resolution
       print(dims)
-      dims = np.floor(dims)
+      dims = np.round(dims)
       print(dims)
       dims = dims.astype(np.int32)
       print(dims)
