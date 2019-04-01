@@ -905,7 +905,7 @@ def create_drone2(tfrecord_dir, drone_dir, resolution=1024):
       cx = frame.shape[1] // 2
       shift = resolution // 2
       frame = frame[cy - shift:cy + shift, cx - shift:cx + shift]
-      print(dims)
+      print(frame.shape)
       frame = frame.transpose(2, 0, 1)
       tfr.add_image(frame)
 
